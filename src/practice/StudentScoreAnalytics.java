@@ -9,10 +9,11 @@ import java.util.stream.Collectors;
 public class StudentScoreAnalytics {
     public static void main(String[] args) {
         List<Student> students = Arrays.asList(
-            new Student("John", Arrays.asList(85, 92, 88)),
-            new Student("Jane", Arrays.asList(78, 74, 80)),
-            new Student("Jack", Arrays.asList(90, 91, 95)),
-            new Student("Jill", Arrays.asList(70, 65, 60))
+                new Student("John", Arrays.asList(85, 92, 88)),
+                new Student("Jane", Arrays.asList(78, 74, 80)),
+                new Student("Jack", Arrays.asList(90, 91, 95)),
+                new Student("Jill", Arrays.asList(70, 65, 60)),
+                new Student("John", Arrays.asList(60, 85, 72))
         );
 
         // Average score of each student
@@ -27,6 +28,12 @@ public class StudentScoreAnalytics {
         students.stream()
                 .filter(s -> s.getScores().stream().mapToInt(Integer::intValue).average().orElse(0) > 85)
                 .forEach(s -> System.out.println(s.getName()));
+
+        Map<String, List<Student>> groups = students.stream().collect(Collectors.groupingBy(Student::getName));
+        groups.forEach((s, students1) -> {
+            System.out.println(s);
+            System.out.println(students1);
+        });
     }
 }
 
@@ -39,6 +46,19 @@ class Student {
         this.scores = scores;
     }
 
-    public String getName() { return name; }
-    public List<Integer> getScores() { return scores; }
+    public String getName() {
+        return name;
+    }
+
+    public List<Integer> getScores() {
+        return scores;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", scores=" + scores +
+                '}';
+    }
 }

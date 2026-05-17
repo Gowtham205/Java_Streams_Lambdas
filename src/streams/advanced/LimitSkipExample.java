@@ -10,7 +10,7 @@ public class LimitSkipExample {
     public static void main(String[] args) {
         List<String> names = Arrays.asList("a", "b", "c", "d", "e");
 
-        names.stream()
+       names.stream()
              .skip(2)      // Skip first 2: "c", "d", "e"
              .limit(2)     // Take next 2: "c", "d"
              .forEach(System.out::println);
