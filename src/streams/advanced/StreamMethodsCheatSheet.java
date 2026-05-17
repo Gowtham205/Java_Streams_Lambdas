@@ -67,13 +67,19 @@ public class StreamMethodsCheatSheet {
         Optional<String> found = names.stream()
                 .filter(n -> n.startsWith("C"))
                 .findFirst();
-        found.ifPresent(n -> System.out.println("First starting with C: " + n));
+        found.ifPresent(n -> System.out.println("First starting with C (findFirst()): " + n));
+
+        Optional<String> foundAny = names.stream()
+                .filter(n -> n.startsWith("C"))
+                .findAny();
+        foundAny.ifPresent(n -> System.out.println("First starting with C (findAny()): " + n));
 
         // 9. flatMap()
         List<List<String>> nested = Arrays.asList(
                 Arrays.asList("a", "b"),
                 Arrays.asList("c", "d")
         );
+        System.out.println("Nested list: " + nested);
         List<String> flattened = nested.stream()
                 .flatMap(List::stream)
                 .toList();

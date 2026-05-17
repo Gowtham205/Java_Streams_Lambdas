@@ -2,7 +2,9 @@ package streams.advanced;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -32,7 +34,7 @@ public class StreamAdvancedMethodsProblems {
         List<String> words = Arrays.asList("hello", "world");
         // Use flatMap to flatten the characters into one list
         List<String> src = words.stream().flatMap(word -> word.chars()
-                .mapToObj(c -> String.valueOf((char)c)))
+                        .mapToObj(c -> String.valueOf((char) c)))
                 .toList();
 
         // Problem 3: Given a list of employees, check if all are in "IT" department
@@ -58,23 +60,21 @@ public class StreamAdvancedMethodsProblems {
         // Problem 5: Print all elements and collect the upper-case versions
         List<String> fruits = Arrays.asList("apple", "banana", "mango");
         // Use peek to debug and map to convert
-
-        List<String> Upper = (List<String>) fruits.stream().map(String::toUpperCase).peek(fruit -> System.out.println("After map: " + fruit))
+        List<String> Upper = fruits.stream().map(String::toUpperCase)
+                .peek(fruit -> System.out.println("After map: " + fruit))
                 .collect(Collectors.toList());
         System.out.println(Upper);
 
         // Problem 6: Use reduce to calculate sum of salaries
         List<Double> salaries = Arrays.asList(50000.0, 65000.0, 42000.0, 80000.0);
         // Use reduce
-       Double sum = salaries.stream().reduce((double) 0,(a, b)->a+b);
+        Double sum = salaries.stream().reduce((double) 0, (a, b) -> a + b);
 
-        System.out.println("Sum of all sal"+ sum);
+        System.out.println("Sum of all sal" + sum);
 
         // Problem 7: Using Stream.of()
         // Create a stream from employee names, filter names longer than 4 characters
-
-
-      List<String> upper = Stream.of("chandu", "gowtham", "ganesh", "UV")
+        List<String> upper = Stream.of("chandu", "gowtham", "ganesh", "UV")
                 .filter(e -> e.length() > 4)
                 .peek(e -> System.out.println("Filtered value: " + e)).collect(Collectors.toList());
         System.out.println(upper);
@@ -82,14 +82,34 @@ public class StreamAdvancedMethodsProblems {
         // Problem 8: Using Optional with findFirst()
         List<String> emails = Arrays.asList("john@yahoo.com", "alice@gmail.com", "mark@outlook.com");
         // Find the first email that ends with "gmail.com", print if present
-//        List<String> first = emails.stream().findFirst("")
-
+        String firstEmail = emails.stream().filter(s -> s.endsWith("gmail.com")).findFirst().orElse("Not Found any");
+        System.out.println(firstEmail);
 
         // Problem 9: Random stream using generate()
         // Generate a stream of 5 random numbers and print them
+        List<Double> randoms = Stream
+                .generate(Math::random)
+                .limit(5)
+                .toList();
+        randoms.forEach(System.out::println);
 
         // Problem 10: Arithmetic progression using iterate()
         // Start from 2, add 3 each time, get first 10 numbers
+        /*public static List<Integer> arithmeticProgression(int start, int step, int count) {
+            return Stream.iterate(start, n -> n + step)
+                    .limit(count)
+                    .collect(Collectors.toList());
+        }*/
+        List<Integer> firstTen = Stream.iterate(2, n -> n + 3)
+                .limit(10)
+                .toList();
+        System.out.println(firstTen);
+
+        // Alternative
+        /*int[] ap = IntStream.iterate(2, n -> n + 3)
+                .limit(10)
+                .toArray();
+        System.out.println(Arrays.toString(ap));*/
 
         // Problem 11: Collect names from Person list and join with comma
         List<Person> people = Arrays.asList(
@@ -98,13 +118,37 @@ public class StreamAdvancedMethodsProblems {
                 new Person("Carol", "IT"),
                 new Person("Dan", "HR")
         );
+        String resultString = people.stream().map(Person::getName).collect(Collectors.joining(","));
+        System.out.println(resultString);
+
         // Use Collectors.mapping() and joining()
 
         // Problem 12: Convert List<Employee> to Map<name, department>
         // Use Collectors.toMap()
+        List<Employee> employeeList = Arrays.asList(
+                new Employee("Alice", "HR"),
+                new Employee("Bob", "Engineering"),
+                new Employee("Charlie", "Engineering"),
+                new Employee("David", "HR"),
+                new Employee("Eve", "Finance")
+        );
+        Map<String, String> empDeptMap = employeeList.stream()
+                .collect(Collectors.toMap(Employee::getName, Employee::getDepartment));
+        System.out.println(empDeptMap);
 
         // Problem 13: Use parallelStream to filter even numbers from 1 to 10000
         // Print the count and time taken
+        List<Integer> nums = IntStream.rangeClosed(1, 1000)
+                .boxed()
+                .toList();
+        long parStart = System.nanoTime();
+        long parCount = nums.parallelStream()
+                .filter(n -> n % 2 == 0)
+                .count();
+        long parTime = System.nanoTime() - parStart;
+        System.out.println("=== Parallel ===");
+        System.out.printf("Count : %d%n", parCount);
+        System.out.printf("Time  : %.3f ms%n", parTime / 1_000_000.0);
     }
 }
 

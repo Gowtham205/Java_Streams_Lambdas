@@ -10,11 +10,14 @@ import java.util.List;
 public class MatchExample {
     public static void main(String[] args) {
         List<String> departments = Arrays.asList("IT", "IT", "HR");
+        System.out.println("List of departments : " + departments);
 
         boolean allIT = departments.stream().allMatch(dept -> dept.equals("IT"));
         boolean noneFinance = departments.stream().noneMatch(dept -> dept.equals("Finance"));
+        boolean anyMatchHR = departments.stream().anyMatch(dept -> dept.contains("HR"));
 
-        System.out.println("All in IT? " + allIT);           // false
-        System.out.println("None in Finance? " + noneFinance); // true
+        System.out.println("All are IT? - " + allIT);           // false
+        System.out.println("None in Finance? - " + noneFinance); // true
+        System.out.println("Any match of HR? - " + anyMatchHR);   // true
     }
 }
